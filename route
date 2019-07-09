@@ -1,0 +1,34 @@
+<?php
+
+
+use GuzzleHttp\Client;
+Route::get('/', function () {
+
+	$access_token = 'BQAnY1aciUp_CNlk0r_IKN6gW0CKgfIrkfZM9ulB1P6PVRlJzDjGgBv9jn39CoditmDe4nHFHkOtu-0wEA0';
+    $headers = [
+	    'Authorization' => 'Bearer ' . $access_token,        
+	    'Accept'        => 'application/json',
+    ];
+    $cliente = new Client([
+		'base_uri' => 'https://api.spotify.com/v1/playlists/',
+	]);
+	
+    
+        $response = $cliente->request('GET', '5yYpKv2k8Asbg6IMuWoncg/tracks', [
+            'headers' => $headers
+        ]);
+
+         //   dd($response->getbody()->getContents());
+    
+  //  return json_decode( $response->getBody()->getContents() );
+        $playlist1 = json_decode($response->getBody()->getContents(), true);
+        $response2 = $cliente->request('GET', '5uZ1Q9RGUgplLabO73Qb7w/tracks', [
+            'headers' => $headers
+        ]);
+        $playlist2 = json_decode($response2->getBody()->getContents(), true);
+
+//     return view('welcome');
+        return view('welcome', compact('playlist1', 'playlist2'));
+    
+
+});

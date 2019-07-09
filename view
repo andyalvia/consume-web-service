@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> 
+        <title>Lista 1</title>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#" onclick="todas();">Lista de Canciones</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" onclick="play1();"> Ver solo Playlist 1 <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="play2();"> Ver solo Playlist 2</a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link  disabled" href="#"  aria-haspopup="true" aria-expanded="false" >
+                        Repetidas
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="container">
+           <div class="row my-3">
+                <h1>Lista de Canciones</h1>
+            </div>                
+            <div class="row" id="playlist1div">
+            <h2>Playlist 1:</h2>
+                <table  class="table table-hover" >
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Artista</th>
+                            <th scope="col">URL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($playlist1["items"] as $item)
+                        <tr>
+                            <td scope="row">{{$item["track"]["name"]}}</td>
+                            <?php $nombre=""; ?>
+                            @foreach($item["track"]["artists"] as $artist)
+                            <?php 
+                            if ($nombre != ""  && isset($artist["name"])) {
+                                $union = "";}else{$union = " ft. ";}
+                                $nombre=$nombre.$artist["name"].$union;
+                            ?>  
+                            @endforeach
+                            <td>{{$nombre}}</td>
+                            <td>{{$item["track"]["external_urls"]["spotify"]}}</td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+                </div>
+                <div class="row" id="playlist2div">
+                <h2>Playlist 2:</h2>
+                <table  class="table table-hover"  >
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Artista</th>
+                            <th scope="col">URL</th>
+                        </tr>
+                    </thead>
+                <tbody>
+                @foreach($playlist2["items"] as $item)
+                    <tr>
+                        <td scope="row">{{$item["track"]["name"]}}</td>
+                        <?php $nombre=""; ?>
+                        @foreach($item["track"]["artists"] as $artist)
+                            <?php 
+                            if ($nombre != ""  && isset($artist["name"])) {
+                                $union = "";}else{$union = " ft. ";}
+                                $nombre=$nombre.$artist["name"].$union;
+                            ?>  
+                        @endforeach
+                        <td>{{$nombre}}</td>
+                        <td>{{$item["track"]["external_urls"]["spotify"]}}</td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+            </div>
+            <h3>Musicas repetidas</h3>
+            <table  class="table table-hover" >
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Artista</th>
+                        <th scope="col">URL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach($playlist1["items"] as $item)
+                    @foreach($playlist2["items"] as $item2)
+                        @if($item["track"]["name"] == $item2["track"]["name"])
+                        <tr>
+                        <td scope="row">{{$item["track"]["name"]}}</td>
+                        <?php $nombre="";?>
+                        @foreach($item["track"]["artists"] as $artist)
+                            <?php 
+                            if ($nombre != ""  && isset($artist["name"])) {
+                                $union = "";}else{$union = " ft. ";}
+                                $nombre=$nombre.$artist["name"].$union;
+                            ?>  
+                        @endforeach
+                        <td>{{$nombre}}</td>
+                        <td>{{$item["track"]["external_urls"]["spotify"]}}</td>
+                    </tr>
+                        @endif
+                    @endforeach
+                @endforeach
+                </tbody>
+            </table>    
+        </div>
+    </body>
+    <script>
+    function play1(){
+        var play1 = document.getElementById('playlist1div');
+        var play2 = document.getElementById('playlist2div');
+    play1.style.display = 'inline';
+    play2.style.display = 'none';
+    }
+    function play2(){
+        var play1 = document.getElementById('playlist1div');
+        var play2 = document.getElementById('playlist2div');
+    play1.style.display = 'none';
+    play2.style.display = 'inline';
+    }
+    
+    function todas(){
+        var play1 = document.getElementById('playlist1div');
+        var play2 = document.getElementById('playlist2div');
+    play1.style.display = 'inline';
+    play2.style.display = 'inline';
+    }
+    </script>    
+</html>
